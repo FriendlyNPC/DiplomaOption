@@ -51,13 +51,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Models\DiplomaDataModel.cs" />
+    <Compile Include="CustomValidation\StudentNumFormat.cs" />
+    <Compile Include="Migrations\Diploma\201510092302015_InitialCreate.cs" />
+    <Compile Include="Migrations\Diploma\201510092302015_InitialCreate.Designer.cs">
+      <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Diploma\Configuration.cs" />
+    <Compile Include="Models\DiplomaDataModelContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Migrations\Diploma\201510092302015_InitialCreate.resx">
+      <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
