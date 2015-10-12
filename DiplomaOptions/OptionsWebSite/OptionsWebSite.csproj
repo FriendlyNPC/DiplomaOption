@@ -172,6 +172,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\OptionController.cs" />
+    <Compile Include="Controllers\YearTermController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -251,6 +252,11 @@
     <Content Include="Views\Choice\Details.cshtml" />
     <Content Include="Views\Choice\Edit.cshtml" />
     <Content Include="Views\Choice\Index.cshtml" />
+    <Content Include="Views\YearTerm\Create.cshtml" />
+    <Content Include="Views\YearTerm\Delete.cshtml" />
+    <Content Include="Views\YearTerm\Details.cshtml" />
+    <Content Include="Views\YearTerm\Edit.cshtml" />
+    <Content Include="Views\YearTerm\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

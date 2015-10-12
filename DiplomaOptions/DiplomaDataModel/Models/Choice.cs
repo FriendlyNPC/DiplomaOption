@@ -46,15 +46,19 @@ namespace DiplomaDataModel.Models
         public int FourthChoiceOptionId { get; set; }
 
         [ForeignKey("FirstChoiceOptionId")]
+        [Display(Name = "First Choice")]
         public Option Option1 { get; set; }
 
         [ForeignKey("SecondChoiceOptionId")]
+        [Display(Name = "Second Choice")]
         public Option Option2 { get; set; }
 
         [ForeignKey("ThirdChoiceOptionId")]
+        [Display(Name = "Third Choice")]
         public Option Option3 { get; set; }
 
         [ForeignKey("FourthChoiceOptionId")]
+        [Display(Name = "Fourth Choice")]
         public Option Option4 { get; set; }
 
         [Required]

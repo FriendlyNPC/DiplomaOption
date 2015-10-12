@@ -33,7 +33,12 @@
                         <!-- Admin only Stuff-->
                         if ( User.IsInRole("Admin") ) {
                             <li>@Html.ActionLink("Options", "Index", "Option")</li>
+                            <li>@Html.ActionLink("Terms", "Index", "YearTerm")</li>
                             <li>@Html.ActionLink("Choices", "Index", "Choice")</li>
+
+                        } else if ( User.IsInRole("Student") ) {
+
+                            <li> @Html.ActionLink("Option Selection", "Create", "Choice") </li>
                         }
 
                     }
