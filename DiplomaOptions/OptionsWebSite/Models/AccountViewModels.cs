@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DiplomaDataModel.CustomValidation;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace OptionsWebSite.Models
@@ -6,6 +7,7 @@ namespace OptionsWebSite.Models
     public class ExternalLoginConfirmationViewModel
     {
         [Required]
+        [EmailAddress]
         [Display(Name = "Email")]
         public string Email { get; set; }
     }
@@ -49,9 +51,9 @@ namespace OptionsWebSite.Models
     public class LoginViewModel
     {
         [Required]
-        [Display(Name = "Email")]
-        [EmailAddress]
-        public string Email { get; set; }
+        [Display(Name = "Student ID")]
+        [StudentNumFormat]
+        public string StudentId { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
@@ -64,6 +66,11 @@ namespace OptionsWebSite.Models
 
     public class RegisterViewModel
     {
+        [Required]
+        [StudentNumFormat]
+        [Display(Name = "Student ID")]
+        public string StudentId { get; set; }
+
         [Required]
         [EmailAddress]
         [Display(Name = "Email")]
@@ -79,6 +86,7 @@ namespace OptionsWebSite.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
     }
 
     public class ResetPasswordViewModel

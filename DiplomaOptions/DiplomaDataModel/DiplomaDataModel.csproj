@@ -57,7 +57,10 @@
       <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Diploma\Configuration.cs" />
+    <Compile Include="Models\Choice.cs" />
     <Compile Include="Models\DiplomaDataModelContext.cs" />
+    <Compile Include="Models\Option.cs" />
+    <Compile Include="Models\YearTerm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -68,6 +71,9 @@
     <EmbeddedResource Include="Migrations\Diploma\201510092302015_InitialCreate.resx">
       <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Doc\MigrationStuff.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

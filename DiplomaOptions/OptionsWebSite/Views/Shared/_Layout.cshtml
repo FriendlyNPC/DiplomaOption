@@ -24,6 +24,19 @@
                     <li>@Html.ActionLink("Home", "Index", "Home")</li>
                     <li>@Html.ActionLink("About", "About", "Home")</li>
                     <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <!-- put Student role stuff here, admin should see it too -->
+                            <!-- go to make choice link, or something, I dunno -->
+                        <!-- End of student stuff -->
+
+                        <!-- Admin only Stuff-->
+                        if ( User.IsInRole("Admin") ) {
+                            <li>@Html.ActionLink("Options", "Index", "Option")</li>
+                            <li>@Html.ActionLink("Choices", "Index", "Choice")</li>
+                        }
+
+                    }
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

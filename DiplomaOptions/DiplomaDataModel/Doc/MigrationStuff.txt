@@ -1,0 +1,19 @@
+﻿==================== Enable-Migrations ==========================
+
+Enable-Migrations -ContextTypeName DimplomaDataModelContext -MigrationsDirectory Migrations\Diploma
+
+Enable-Migrations -ContextTypeName ApplicationDbContext -MigrationsDirectory Migrations\Identity
+
+==================== Add-Migration ==============================
+
+add-migration -ConfigurationTypeName DiplomaDataModel.Migrations.Diploma.Configuration "InitialCreate"
+
+add-migration -ConfigurationTypeName OptionsWebSite.Migrations.Identity.Configuration "InitialCreate"
+
+==================== update-database ==============================
+
+update-database -ConfigurationTypeName DiplomaDataModel.Migrations.Diploma.Configuration
+
+update-database -ConfigurationTypeName OptionsWebSite.Migrations.Identity.Configuration
+
+=============================================
