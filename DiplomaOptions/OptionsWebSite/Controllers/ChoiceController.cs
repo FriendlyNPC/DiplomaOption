@@ -43,11 +43,11 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin, Student")]
         public ActionResult Create()
         {
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title");
-            ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId");
+            ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
+            ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
+            ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
+            ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
+
             return View();
         }
 
@@ -59,6 +59,12 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin, Student")]
         public async Task<ActionResult> Create([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
+            choice.SelectionDate = new DateTime();
+            var defaultYearTerm = db.YearTerms
+                                            .Where(y => y.IsDefault == true)
+                                            .First();
+            choice.YearTermId = defaultYearTerm.YearTermId;
+            
             if (ModelState.IsValid)
             {
                 db.Choices.Add(choice);
@@ -66,11 +72,11 @@ namespace OptionsWebSite.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FirstChoiceOptionId);
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.SecondChoiceOptionId);
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.ThirdChoiceOptionId);
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FourthChoiceOptionId);
-            ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
+            ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
+            ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
+            ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
+            ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
+            
             return View(choice);
         }
 
@@ -109,10 +115,10 @@ namespace OptionsWebSite.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FirstChoiceOptionId);
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.SecondChoiceOptionId);
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.ThirdChoiceOptionId);
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FourthChoiceOptionId);
+            ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
+            ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
+            ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
+            ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
             ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
             return View(choice);
         }
@@ -153,5 +159,12 @@ namespace OptionsWebSite.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+        private List<Option> onlyActiveOptions()
+        {
+            return db.Options.Where(o => o.IsActive == true).ToList();
+        }
+
     }
 }

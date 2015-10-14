@@ -30,8 +30,10 @@ namespace DiplomaDataModel.Models
         public virtual DbSet<Option> Options { get; set; }
         public virtual DbSet<YearTerm> YearTerms { get; set; }
         public virtual DbSet<Choice> Choices { get; set; }
-
+        
     }
+
+    
 
    
 
