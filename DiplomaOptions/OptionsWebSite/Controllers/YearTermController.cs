@@ -105,20 +105,17 @@ namespace OptionsWebSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                if (yearTerm.IsDefault == true)
-                {
-                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
+                //if (yearTerm.IsDefault)
+                //{
+                //    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
 
-
-                    if (defaultTerm != null)
-                    {
-                        defaultTerm.IsDefault = false;
-                        db.Entry(defaultTerm).State = EntityState.Modified;
-                        await db.SaveChangesAsync();
-                    }
-                    //ok if there is no default, we're going to set to default anyway.
-                }
-                
+                //    if (defaultTerm != null && defaultTerm.YearTermId != yearTerm.YearTermId)
+                //    {
+                //        defaultTerm.IsDefault = false;
+                //        db.Entry(defaultTerm).State = EntityState.Modified;
+                //    }
+                //    //ok if there is no default, we're going to set to default anyway.
+                //}
 
                 db.Entry(yearTerm).State = EntityState.Modified;
                 await db.SaveChangesAsync();
