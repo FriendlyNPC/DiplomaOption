@@ -118,8 +118,15 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
+
+            List<Choice> choices = db.Choices.Where(c => (c.FirstChoiceOptionId == id) ||
+                (c.SecondChoiceOptionId == id) ||
+                (c.ThirdChoiceOptionId == id) ||
+                (c.FourthChoiceOptionId == id) ).ToList();
+            db.Choices.RemoveRange(choices);
             Option option = await db.Options.FindAsync(id);
             db.Options.Remove(option);
+            
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

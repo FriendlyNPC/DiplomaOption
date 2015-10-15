@@ -68,6 +68,7 @@ namespace OptionsWebSite.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Login(LoginViewModel model, string returnUrl)
         {
+            model.StudentId = model.StudentId.ToUpper();
             if (!ModelState.IsValid)
             {
                 return View(model);

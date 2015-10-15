@@ -16,6 +16,7 @@ namespace DiplomaDataModel.Models
         [ScaffoldColumn(false)]
         public int ChoiceId { get; set; }
 
+        [Display(Name ="Year Term")]
         public int YearTermId { get; set; }
         [ForeignKey("YearTermId")]
         public YearTerm YearTerm { get; set; }

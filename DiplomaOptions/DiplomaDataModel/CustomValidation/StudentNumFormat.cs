@@ -15,7 +15,7 @@ namespace DiplomaDataModel.CustomValidation
         {
             if (value != null)
             {
-                string sPattern = "^A00\\d{6}$";
+                string sPattern = "^(a|A)00\\d{6}$";
 
                 if ( !System.Text.RegularExpressions.Regex.IsMatch((string)value, sPattern) )
                 {

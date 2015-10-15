@@ -95,6 +95,13 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin, Student")]
         public async Task<ActionResult> Create([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
+            choice.StudentId = choice.StudentId.ToUpper();
+
+            if (User.IsInRole("Student"))
+            {
+                choice.StudentId = User.Identity.Name;
+            }
+
             choice.SelectionDate = DateTime.Now;
             var defaultYearTerm = db.YearTerms
                                             .Where(y => y.IsDefault == true)
@@ -105,7 +112,15 @@ namespace OptionsWebSite.Controllers
             {
                 db.Choices.Add(choice);
                 await db.SaveChangesAsync();
-                return RedirectToAction("Index");
+                if(User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index");
+                }else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
+
+                
             }
 
             ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
@@ -145,6 +160,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
+            choice.StudentId = choice.StudentId.ToUpper();
             if (ModelState.IsValid)
             {
                 db.Entry(choice).State = EntityState.Modified;
@@ -172,6 +188,12 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+
+            choice.Option1 = await db.Options.FindAsync(choice.FirstChoiceOptionId);
+            choice.Option2 = await db.Options.FindAsync(choice.SecondChoiceOptionId);
+            choice.Option3 = await db.Options.FindAsync(choice.ThirdChoiceOptionId);
+            choice.Option4 = await db.Options.FindAsync(choice.FourthChoiceOptionId);
+
             return View(choice);
         }
 
