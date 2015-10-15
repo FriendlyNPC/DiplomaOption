@@ -58,6 +58,7 @@
     </Compile>
     <Compile Include="Migrations\Diploma\Configuration.cs" />
     <Compile Include="Models\Choice.cs" />
+    <Compile Include="Models\CustomValidation\NotEqual.cs" />
     <Compile Include="Models\DiplomaDataModelContext.cs" />
     <Compile Include="Models\Option.cs" />
     <Compile Include="Models\YearTerm.cs" />

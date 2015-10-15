@@ -24,7 +24,7 @@ namespace OptionsWebSite.Controllers
         }
 
         // GET: Choice/Details/5
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, Student")]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -32,10 +32,31 @@ namespace OptionsWebSite.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Choice choice = await db.Choices.FindAsync(id);
+
             if (choice == null)
             {
                 return HttpNotFound();
             }
+
+            if(User.IsInRole("Student"))
+            {
+                if (! choice.StudentId.Equals(User.Identity.Name))
+                {
+                    var exists = db.Choices.Where(c => c.StudentId == User.Identity.Name).FirstOrDefault();
+                    if (exists != null)
+                    {
+                        return RedirectToAction("Details", "Choice", new { id = exists.ChoiceId });
+                    }
+                    return RedirectToAction("Create", "Choice");
+                }
+                    
+            }
+
+            choice.Option1 = await db.Options.FindAsync(choice.FirstChoiceOptionId);
+            choice.Option2 = await db.Options.FindAsync(choice.SecondChoiceOptionId);
+            choice.Option3 = await db.Options.FindAsync(choice.ThirdChoiceOptionId);
+            choice.Option4 = await db.Options.FindAsync(choice.FourthChoiceOptionId);
+
             return View(choice);
         }
 
@@ -43,12 +64,27 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin, Student")]
         public ActionResult Create()
         {
+
+            if (User.IsInRole("Student"))
+            {
+                var exists = db.Choices.Where(c => c.StudentId == User.Identity.Name).FirstOrDefault();
+
+                if (exists != null)
+                {
+                    //choice already exists
+                    return RedirectToAction("Details", "Choice", new { id = exists.ChoiceId });
+                }
+            }
+
             ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
             ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
             ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
             ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
 
-            return View();
+            Choice choice = new Choice();
+            choice.StudentId = User.Identity.Name;
+
+            return View(choice);
         }
 
         // POST: Choice/Create
@@ -59,7 +95,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin, Student")]
         public async Task<ActionResult> Create([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
-            choice.SelectionDate = new DateTime();
+            choice.SelectionDate = DateTime.Now;
             var defaultYearTerm = db.YearTerms
                                             .Where(y => y.IsDefault == true)
                                             .First();
@@ -93,10 +129,10 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.FirstChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FirstChoiceOptionId);
-            ViewBag.SecondChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.SecondChoiceOptionId);
-            ViewBag.ThirdChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.ThirdChoiceOptionId);
-            ViewBag.FourthChoiceOptionId = new SelectList(db.Options, "OptionId", "Title", choice.FourthChoiceOptionId);
+            ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
+            ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
+            ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
+            ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
             ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
             return View(choice);
         }

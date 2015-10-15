@@ -6,7 +6,7 @@ namespace DiplomaDataModel.CustomValidation
     public class StudentNumFormat : ValidationAttribute
     {
 
-        public StudentNumFormat() : base("{0} contains invalid character.")
+        public StudentNumFormat() : base("{0} is not a valid student Id")
         {
 
         }

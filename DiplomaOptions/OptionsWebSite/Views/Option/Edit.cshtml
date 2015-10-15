@@ -10,7 +10,8 @@
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+    @Html.HiddenFor(model => model.OptionId)
+
     <div class="form-horizontal">
         <h4>Option</h4>
         <hr />

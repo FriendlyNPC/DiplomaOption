@@ -24,5 +24,8 @@ namespace DiplomaDataModel.Models
         public bool IsActive { get; set; }
 
         public List<Choice> Choice { get; set; }
+        
     }
+
+    
 }

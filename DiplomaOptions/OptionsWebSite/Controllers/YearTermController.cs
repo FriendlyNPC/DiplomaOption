@@ -35,6 +35,7 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+            
             return View(yearTerm);
         }
 
@@ -55,6 +56,20 @@ namespace OptionsWebSite.Controllers
         {
             if (ModelState.IsValid)
             {
+
+                if (yearTerm.IsDefault == true)
+                {
+                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
+                    //ok if there is no default, we're probably going to set it anyway.
+                    if (defaultTerm != null)
+                    {
+                        defaultTerm.IsDefault = false;
+
+                        db.Entry(defaultTerm).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                    }
+                }
+
                 db.YearTerms.Add(yearTerm);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -76,6 +91,7 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+
             return View(yearTerm);
         }
 
@@ -89,10 +105,26 @@ namespace OptionsWebSite.Controllers
         {
             if (ModelState.IsValid)
             {
+                if (yearTerm.IsDefault == true)
+                {
+                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
+
+
+                    if (defaultTerm != null)
+                    {
+                        defaultTerm.IsDefault = false;
+                        db.Entry(defaultTerm).State = EntityState.Modified;
+                        await db.SaveChangesAsync();
+                    }
+                    //ok if there is no default, we're going to set to default anyway.
+                }
+                
+
                 db.Entry(yearTerm).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
+
             return View(yearTerm);
         }
 
@@ -115,9 +147,22 @@ namespace OptionsWebSite.Controllers
         // POST: YearTerm/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             YearTerm yearTerm = await db.YearTerms.FindAsync(id);
+            //if (yearTerm.IsDefault == true)
+            //{
+            //    YearTerm lastNonDefaultTerm = await db.YearTerms.FirstOrDefaultAsync(e => e.IsDefault == false);
+
+            //    if (lastNonDefaultTerm != null)
+            //    {
+            //        lastNonDefaultTerm.IsDefault = true;
+            //        db.Entry(lastNonDefaultTerm).State = EntityState.Modified;
+            //        await db.SaveChangesAsync();
+            //    }
+            //}
+
             db.YearTerms.Remove(yearTerm);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -131,5 +176,7 @@ namespace OptionsWebSite.Controllers
             }
             base.Dispose(disposing);
         }
+
+
     }
 }

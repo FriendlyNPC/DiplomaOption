@@ -17,30 +17,18 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                @Html.ActionLink("Application name", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                @Html.ActionLink("CST Diploma Options", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
-                    <li>@Html.ActionLink("Contact", "Contact", "Home")</li>
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <!-- put Student role stuff here, admin should see it too -->
-                            <!-- go to make choice link, or something, I dunno -->
-                        <!-- End of student stuff -->
-
                         <!-- Admin only Stuff-->
                         if ( User.IsInRole("Admin") ) {
                             <li>@Html.ActionLink("Options", "Index", "Option")</li>
                             <li>@Html.ActionLink("Terms", "Index", "YearTerm")</li>
                             <li>@Html.ActionLink("Choices", "Index", "Choice")</li>
-
-                        } else if ( User.IsInRole("Student") ) {
-
-                            <li> @Html.ActionLink("Option Selection", "Create", "Choice") </li>
                         }
-
                     }
                 </ul>
                 @Html.Partial("_LoginPartial")

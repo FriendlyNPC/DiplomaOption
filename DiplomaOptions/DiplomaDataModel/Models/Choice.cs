@@ -34,15 +34,22 @@ namespace DiplomaDataModel.Models
 
         [Required]
         [Display(Name = "First Choice")]
+        [NotEqual("", "", "")]
         public int FirstChoiceOptionId { get; set; }
+
         [Required]
         [Display(Name = "Second Choice")]
+        [NotEqual("FirstChoiceOptionId", "", "")]
         public int SecondChoiceOptionId { get; set; }
+
         [Required]
         [Display(Name = "Third Choice")]
+        [NotEqual("FirstChoiceOptionId", "SecondChoiceOptionId", "")]
         public int ThirdChoiceOptionId { get; set; }
+
         [Required]
         [Display(Name = "Fourth Choice")]
+        [NotEqual("FirstChoiceOptionId", "SecondChoiceOptionId", "ThirdChoiceOptionId")]
         public int FourthChoiceOptionId { get; set; }
 
         [ForeignKey("FirstChoiceOptionId")]

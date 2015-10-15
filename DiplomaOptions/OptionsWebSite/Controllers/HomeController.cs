@@ -10,20 +10,20 @@ namespace OptionsWebSite.Controllers
     {
         public ActionResult Index()
         {
-            return View();
-        }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-
+            if (User.Identity.IsAuthenticated)
+            {
+                if (User.IsInRole("Student")) {
+                    return RedirectToAction("Create", "Choice");
+                }
+                else if(User.IsInRole("Admin"))
+                {
+                    return RedirectToAction("Index", "Choice");
+                } 
+            } else
+            {
+                return RedirectToAction("Login", "Account");
+            }
             return View();
         }
     }

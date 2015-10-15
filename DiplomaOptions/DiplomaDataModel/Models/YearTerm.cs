@@ -19,7 +19,9 @@ namespace DiplomaDataModel.Models
         public int Year { get; set; }
         [Required]
         public int Term { get; set; }
+
         [Required, DefaultValueAttribute(false)]
+        [Display(Name = "Default")]
         public bool IsDefault { get; set; }
 
         public List<Choice> Choice { get; set; }
