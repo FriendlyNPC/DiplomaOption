@@ -17,3 +17,7 @@ update-database -ConfigurationTypeName DiplomaDataModel.Migrations.Diploma.Confi
 update-database -ConfigurationTypeName OptionsWebSite.Migrations.Identity.Configuration
 
 =============================================
+
+sqllocaldb.exe stop
+
+sqllocaldb.exe delete
