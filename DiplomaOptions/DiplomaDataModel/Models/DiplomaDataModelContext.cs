@@ -19,7 +19,7 @@ namespace DiplomaDataModel.Models
         // If you wish to target a different database and/or database provider, modify the 'DiplomaDataModel' 
         // connection string in the application configuration file.
         public DiplomaDataModelContext()
-            : base("DefaultConnection")
+            : base("DiplomaContext")
         {
         }
 
