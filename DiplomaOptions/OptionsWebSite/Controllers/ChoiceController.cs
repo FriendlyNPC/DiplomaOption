@@ -105,7 +105,7 @@ namespace OptionsWebSite.Controllers
             {
                 choice.StudentId = User.Identity.Name;
             }
-
+            
             choice.SelectionDate = DateTime.Now;
             var defaultYearTerm = db.YearTerms
                                             .Where(y => y.IsDefault == true)

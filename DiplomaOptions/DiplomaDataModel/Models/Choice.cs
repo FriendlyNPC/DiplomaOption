@@ -22,6 +22,7 @@ namespace DiplomaDataModel.Models
         public YearTerm YearTerm { get; set; }
 
         [Required, MaxLength(9), StudentNumFormat]
+        [Index(IsUnique = true)]
         [Display(Name = "Student Number")]
         public string StudentId { get; set; }
 
