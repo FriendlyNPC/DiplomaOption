@@ -35,7 +35,8 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
-            
+
+            ViewBag.TermFriendlyString = convertToFriendlyName(yearTerm.Term);
             return View(yearTerm);
         }
 
@@ -43,6 +44,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View();
         }
 
@@ -54,6 +56,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Create([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
         {
+            
             if (ModelState.IsValid)
             {
 
@@ -64,9 +67,6 @@ namespace OptionsWebSite.Controllers
                     if (defaultTerm != null)
                     {
                         defaultTerm.IsDefault = false;
-
-                        db.Entry(defaultTerm).State = EntityState.Modified;
-                        await db.SaveChangesAsync();
                     }
                 }
 
@@ -74,7 +74,7 @@ namespace OptionsWebSite.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -91,7 +91,7 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -105,23 +105,38 @@ namespace OptionsWebSite.Controllers
         {
             if (ModelState.IsValid)
             {
-                //if (yearTerm.IsDefault)
-                //{
-                //    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
+                if (yearTerm.IsDefault)
+                {
+                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
 
-                //    if (defaultTerm != null && defaultTerm.YearTermId != yearTerm.YearTermId)
-                //    {
-                //        defaultTerm.IsDefault = false;
-                //        db.Entry(defaultTerm).State = EntityState.Modified;
-                //    }
-                //    //ok if there is no default, we're going to set to default anyway.
-                //}
+                    if (defaultTerm != null && defaultTerm.YearTermId != yearTerm.YearTermId)
+                    {
+                        defaultTerm.IsDefault = false;
+                        db.Entry(yearTerm).State = EntityState.Modified;
+                    }
+                    //ok if there is no default, we're going to set to default anyway.
+                }
+                else
+                {
+                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
 
-                db.Entry(yearTerm).State = EntityState.Modified;
+                    if (defaultTerm != null && defaultTerm.YearTermId == yearTerm.YearTermId)
+                    {
+
+                        YearTerm nonDefault = await db.YearTerms.Where(e => e.IsDefault == false).FirstOrDefaultAsync();
+                        if (nonDefault != null)
+                        {
+                            db.Entry(defaultTerm).CurrentValues.SetValues(yearTerm);
+                            nonDefault.IsDefault = true;
+                        }
+                    }
+                }
+
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -138,6 +153,9 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.TermFriendlyString = convertToFriendlyName(yearTerm.Term);
+
             return View(yearTerm);
         }
 
@@ -148,18 +166,14 @@ namespace OptionsWebSite.Controllers
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             YearTerm yearTerm = await db.YearTerms.FindAsync(id);
-            //if (yearTerm.IsDefault == true)
-            //{
-            //    YearTerm lastNonDefaultTerm = await db.YearTerms.FirstOrDefaultAsync(e => e.IsDefault == false);
-
-            //    if (lastNonDefaultTerm != null)
-            //    {
-            //        lastNonDefaultTerm.IsDefault = true;
-            //        db.Entry(lastNonDefaultTerm).State = EntityState.Modified;
-            //        await db.SaveChangesAsync();
-            //    }
-            //}
-
+            if (yearTerm.IsDefault)
+            {
+                YearTerm nonDefault = await db.YearTerms.Where(e => e.IsDefault == false).FirstOrDefaultAsync();
+                if (nonDefault != null) {
+                    nonDefault.IsDefault = true;
+                }
+            }
+            
             db.YearTerms.Remove(yearTerm);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
@@ -174,6 +188,39 @@ namespace OptionsWebSite.Controllers
             base.Dispose(disposing);
         }
 
+        private string convertToFriendlyName(int termCode)
+        {
+            string friendlyName;
+            switch (termCode)
+            {
+                case 10:
+                    friendlyName = "Winter";
+                    break;
+                case 20:
+                    friendlyName = "Spring/Summer";
+                    break;
+                case 30:
+                    friendlyName = "Fall";
+                    break;
+                default:
+                    friendlyName = "BAD_TERM_CODE";
+                    break;
+            }
+            return friendlyName;
+        }
+
+        private SelectList generatFriendlyTermList()
+        {
+            SelectList termList = new SelectList(
+                new[]
+                {
+                new SelectListItem{ Text="Winter", Value="10", Selected = true },
+                new SelectListItem{ Text="Spring/Summer", Value="20"},
+                new SelectListItem{ Text="Fall", Value="30"}
+                }, "Value", "Text", "2");
+
+            return termList;
+        }
 
     }
 }
