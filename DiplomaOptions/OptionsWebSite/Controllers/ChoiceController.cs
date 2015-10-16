@@ -72,13 +72,13 @@ namespace OptionsWebSite.Controllers
             if (User.IsInRole("Student"))
             {
                 var exists = db.Choices.Where(c => c.StudentId == User.Identity.Name).FirstOrDefault();
-
                 if (exists != null)
                 {
                     //choice already exists
                     return RedirectToAction("Details", "Choice", new { id = exists.ChoiceId });
                 }
             }
+            
 
             ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
             ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title");
@@ -104,6 +104,17 @@ namespace OptionsWebSite.Controllers
             if (User.IsInRole("Student"))
             {
                 choice.StudentId = User.Identity.Name;
+            }
+
+            Choice exists = await db.Choices.SingleOrDefaultAsync( e => e.StudentId == choice.StudentId);
+            if(exists != null)
+            {
+                ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
+                ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
+                ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
+                ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
+                ViewBag.ExistsError = "A Selection by this student already exists.";
+                return View(choice);
             }
             
             choice.SelectionDate = DateTime.Now;
@@ -167,6 +178,20 @@ namespace OptionsWebSite.Controllers
         public async Task<ActionResult> Edit([Bind(Include = "ChoiceId,YearTermId,StudentId,StudentFirstName,StudentLastName,FirstChoiceOptionId,SecondChoiceOptionId,ThirdChoiceOptionId,FourthChoiceOptionId,SelectionDate")] Choice choice)
         {
             choice.StudentId = choice.StudentId.ToUpper();
+
+            //does another student record with the same name exist (will have different choiceId, so we don't find this record)
+            Choice exists = await db.Choices.SingleOrDefaultAsync(e => (e.StudentId == choice.StudentId) && (e.ChoiceId != choice.ChoiceId));
+            if (exists != null)
+            {
+                ViewBag.ExistsError = "A Selection by this student already exists.";
+                ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
+                ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
+                ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
+                ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
+                ViewBag.YearTermId = getFriendlyTermNamesList(choice.YearTermId);
+                return View(choice);
+            }
+
             if (ModelState.IsValid)
             {
                 db.Entry(choice).State = EntityState.Modified;

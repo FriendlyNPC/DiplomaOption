@@ -56,6 +56,10 @@
     <Compile Include="Migrations\Diploma\201510092302015_InitialCreate.Designer.cs">
       <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Diploma\201510162105093_uniqueStudentChoice.cs" />
+    <Compile Include="Migrations\Diploma\201510162105093_uniqueStudentChoice.Designer.cs">
+      <DependentUpon>201510162105093_uniqueStudentChoice.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Diploma\Configuration.cs" />
     <Compile Include="Models\Choice.cs" />
     <Compile Include="Models\CustomValidation\NotEqual.cs" />
@@ -71,6 +75,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\Diploma\201510092302015_InitialCreate.resx">
       <DependentUpon>201510092302015_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Diploma\201510162105093_uniqueStudentChoice.resx">
+      <DependentUpon>201510162105093_uniqueStudentChoice.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
