@@ -35,7 +35,8 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
-            
+
+            ViewBag.TermFriendlyString = convertToFriendlyName(yearTerm.Term);
             return View(yearTerm);
         }
 
@@ -43,6 +44,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View();
         }
 
@@ -54,6 +56,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Create([Bind(Include = "YearTermId,Year,Term,IsDefault")] YearTerm yearTerm)
         {
+            
             if (ModelState.IsValid)
             {
 
@@ -74,7 +77,7 @@ namespace OptionsWebSite.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -91,7 +94,7 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
-
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -121,7 +124,7 @@ namespace OptionsWebSite.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
+            ViewBag.FriendlyTerm = generatFriendlyTermList();
             return View(yearTerm);
         }
 
@@ -138,6 +141,9 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+
+            ViewBag.TermFriendlyString = convertToFriendlyName(yearTerm.Term);
+
             return View(yearTerm);
         }
 
@@ -174,6 +180,39 @@ namespace OptionsWebSite.Controllers
             base.Dispose(disposing);
         }
 
+        private string convertToFriendlyName(int termCode)
+        {
+            string friendlyName;
+            switch (termCode)
+            {
+                case 10:
+                    friendlyName = "Winter";
+                    break;
+                case 20:
+                    friendlyName = "Spring/Summer";
+                    break;
+                case 30:
+                    friendlyName = "Fall";
+                    break;
+                default:
+                    friendlyName = "BAD_TERM_CODE";
+                    break;
+            }
+            return friendlyName;
+        }
+
+        private SelectList generatFriendlyTermList()
+        {
+            SelectList termList = new SelectList(
+                new[]
+                {
+                new SelectListItem{ Text="Winter", Value="10", Selected = true },
+                new SelectListItem{ Text="Spring/Summer", Value="20"},
+                new SelectListItem{ Text="Fall", Value="30"}
+                }, "Value", "Text", "2");
+
+            return termList;
+        }
 
     }
 }

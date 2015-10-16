@@ -4,10 +4,20 @@
     ViewBag.Title = "Details";
 }
 
-<h2>Details</h2>
+@if (User.Identity.IsAuthenticated)
+{
+    if (User.IsInRole("Admin") )
+    {
+        <h2>Option Selection Details</h2>
+    }
+    else
+    {
+        <h2>Your Option Selection</h2>
+    }
+}
+
 
 <div>
-    <h4>Choice</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -47,7 +57,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.YearTermId)
+            @ViewBag.FriendlyTermName
         </dd>
 
         <dt>

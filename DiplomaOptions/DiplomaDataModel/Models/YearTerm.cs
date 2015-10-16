@@ -14,7 +14,7 @@ namespace DiplomaDataModel.Models
     {
         [Key]
         [ScaffoldColumn(false)]
-        [Display(Name = "Year Term")]
+        [Display(Name = "Term")]
         public int YearTermId { get; set; }
         [Required]
         public int Year { get; set; }

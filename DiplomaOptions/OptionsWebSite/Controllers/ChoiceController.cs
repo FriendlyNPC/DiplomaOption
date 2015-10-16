@@ -19,7 +19,8 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles ="Admin")]
         public async Task<ActionResult> Index()
         {
-            var choices = db.Choices.Include(c => c.Option1).Include(c => c.Option2).Include(c => c.Option3).Include(c => c.Option4).Include(c => c.YearTerm);
+            var choices = db.Choices.Include(c => c.Option1).Include(c => c.Option2).Include(c => c.Option3).Include(c => c.Option4).Include(c => c.YearTerm);            
+
             return View(await choices.ToListAsync());
         }
 
@@ -56,6 +57,9 @@ namespace OptionsWebSite.Controllers
             choice.Option2 = await db.Options.FindAsync(choice.SecondChoiceOptionId);
             choice.Option3 = await db.Options.FindAsync(choice.ThirdChoiceOptionId);
             choice.Option4 = await db.Options.FindAsync(choice.FourthChoiceOptionId);
+
+            string friendlyTermName = await convertTermToFriendlyName(choice.YearTermId);
+            ViewBag.FriendlyTermName = friendlyTermName;
 
             return View(choice);
         }
@@ -144,11 +148,13 @@ namespace OptionsWebSite.Controllers
             {
                 return HttpNotFound();
             }
+
+
             ViewBag.FirstChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FirstChoiceOptionId);
             ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
             ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
             ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
-            ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
+            ViewBag.YearTermId = getFriendlyTermNamesList(choice.YearTermId);
             return View(choice);
         }
 
@@ -171,7 +177,7 @@ namespace OptionsWebSite.Controllers
             ViewBag.SecondChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.SecondChoiceOptionId);
             ViewBag.ThirdChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.ThirdChoiceOptionId);
             ViewBag.FourthChoiceOptionId = new SelectList(onlyActiveOptions(), "OptionId", "Title", choice.FourthChoiceOptionId);
-            ViewBag.YearTermId = new SelectList(db.YearTerms, "YearTermId", "YearTermId", choice.YearTermId);
+            ViewBag.YearTermId = getFriendlyTermNamesList(choice.YearTermId);
             return View(choice);
         }
 
@@ -193,6 +199,8 @@ namespace OptionsWebSite.Controllers
             choice.Option2 = await db.Options.FindAsync(choice.SecondChoiceOptionId);
             choice.Option3 = await db.Options.FindAsync(choice.ThirdChoiceOptionId);
             choice.Option4 = await db.Options.FindAsync(choice.FourthChoiceOptionId);
+            string friendlyTermName = await convertTermToFriendlyName(choice.YearTermId);
+            ViewBag.FriendlyTermName =friendlyTermName;
 
             return View(choice);
         }
@@ -224,5 +232,50 @@ namespace OptionsWebSite.Controllers
             return db.Options.Where(o => o.IsActive == true).ToList();
         }
 
+
+        private SelectList getFriendlyTermNamesList(int selected_id)
+        {
+            List<SelectListItem> terms = new List<SelectListItem>();
+
+            List<YearTerm> termObjs = db.YearTerms.ToList();
+
+            foreach(YearTerm yearterm in termObjs)
+            {
+                terms.Add(new SelectListItem { Value = yearterm.YearTermId.ToString(), Text = convertTermToFriendlyName(yearterm.Year, yearterm.Term) });
+            }
+
+            SelectList termList = new SelectList(
+                terms, "Value", "Text", selected_id.ToString());
+
+            return termList;
+        }
+
+        private async Task<string> convertTermToFriendlyName(int id)
+        {
+            YearTerm yearterm = await db.YearTerms.FindAsync(id);
+            return convertTermToFriendlyName(yearterm.Year, yearterm.Term);
+        }
+
+        private string convertTermToFriendlyName(int year, int termCode)
+        {
+            string friendlyName = year.ToString() + " - ";
+            switch (termCode)
+            {
+                case 10:
+                    friendlyName += "Winter";
+                    break;
+                case 20:
+                    friendlyName += "Spring/Summer";
+                    break;
+                case 30:
+                    friendlyName += "Fall";
+                    break;
+                default:
+                    friendlyName += "BAD_TERM_CODE";
+                    break;
+            }
+            
+            return friendlyName;
+        }
     }
 }
