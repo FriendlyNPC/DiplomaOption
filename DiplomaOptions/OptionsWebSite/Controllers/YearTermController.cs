@@ -62,11 +62,14 @@ namespace OptionsWebSite.Controllers
 
                 if (yearTerm.IsDefault == true)
                 {
-                    YearTerm defaultTerm = await db.YearTerms.SingleOrDefaultAsync(e => e.IsDefault == true);
+                    List<YearTerm> defaultTerms = await db.YearTerms.Where(e => e.IsDefault == true).ToListAsync();
                     //ok if there is no default, we're probably going to set it anyway.
-                    if (defaultTerm != null)
+                    if (defaultTerms.Count != 0)
                     {
-                        defaultTerm.IsDefault = false;
+                        foreach(YearTerm term in defaultTerms)
+                        {
+                            term.IsDefault = false;
+                        }
                     }
                 }
 
