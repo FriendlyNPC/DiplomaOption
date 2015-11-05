@@ -12,7 +12,7 @@ namespace OptionsWebSite.Migrations.Identity
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"Migrations\Identity";
         }
 

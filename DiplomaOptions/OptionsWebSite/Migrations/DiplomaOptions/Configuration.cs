@@ -10,7 +10,7 @@ namespace OptionsWebSite.Migrations.DiplomaOptions
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = false;
+            AutomaticMigrationsEnabled = true;
             MigrationsDirectory = @"Migrations\DiplomaOptions";
         }
 
