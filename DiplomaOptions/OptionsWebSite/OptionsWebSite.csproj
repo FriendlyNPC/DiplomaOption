@@ -176,9 +176,14 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\Identity\201510112317148_InitialCreate.cs" />
-    <Compile Include="Migrations\Identity\201510112317148_InitialCreate.Designer.cs">
-      <DependentUpon>201510112317148_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.cs" />
+    <Compile Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.Designer.cs">
+      <DependentUpon>201511052137017_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DiplomaOptions\Configuration.cs" />
+    <Compile Include="Migrations\Identity\201511052145137_InitialCreate.cs" />
+    <Compile Include="Migrations\Identity\201511052145137_InitialCreate.Designer.cs">
+      <DependentUpon>201511052145137_InitialCreate.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -292,8 +297,11 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\Identity\201510112317148_InitialCreate.resx">
-      <DependentUpon>201510112317148_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.resx">
+      <DependentUpon>201511052137017_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201511052145137_InitialCreate.resx">
+      <DependentUpon>201511052145137_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>

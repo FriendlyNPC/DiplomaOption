@@ -1,8 +1,7 @@
-namespace DiplomaDataModel.Migrations.Diploma
+namespace OptionsWebSite.Migrations.DiplomaOptions
 {
-    using Models;
+    using DiplomaDataModel.Models;
     using System;
-    using System.Collections.Generic;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
@@ -12,13 +11,13 @@ namespace DiplomaDataModel.Migrations.Diploma
         public Configuration()
         {
             AutomaticMigrationsEnabled = false;
-            MigrationsDirectory = @"Migrations\Diploma";
+            MigrationsDirectory = @"Migrations\DiplomaOptions";
         }
 
         protected override void Seed(DiplomaDataModel.Models.DiplomaDataModelContext context)
         {
             context.YearTerms.AddOrUpdate(
-                y => new { y.Year, y.Term }, 
+                y => new { y.Year, y.Term },
                 new YearTerm
                 {
                     Year = 2015,
@@ -46,7 +45,7 @@ namespace DiplomaDataModel.Migrations.Diploma
             );
 
             context.Options.AddOrUpdate(
-                o => new {o.Title},
+                o => new { o.Title },
                 new Option
                 {
                     Title = "Data Communications",
@@ -83,7 +82,20 @@ namespace DiplomaDataModel.Migrations.Diploma
                     IsActive = false
                 }
             );
-            
+
+
+            //add seeded choices
+            /*
+            context.Options.AddOrUpdate(
+                o => new { o.Title },
+                new Option
+                {
+                    Title = "Data Communications",
+                    IsActive = true
+                }
+            }
+            */
+
             context.SaveChanges();
 
         }

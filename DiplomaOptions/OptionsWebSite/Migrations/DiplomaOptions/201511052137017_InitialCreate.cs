@@ -1,4 +1,4 @@
-namespace DiplomaDataModel.Migrations.Diploma
+namespace OptionsWebSite.Migrations.DiplomaOptions
 {
     using System;
     using System.Data.Entity.Migrations;
@@ -25,12 +25,13 @@ namespace DiplomaDataModel.Migrations.Diploma
                     })
                 .PrimaryKey(t => t.ChoiceId)
                 .ForeignKey("dbo.Option", t => t.Option_OptionId)
-                .ForeignKey("dbo.Option", t => t.FirstChoiceOptionId, cascadeDelete: false)
-                .ForeignKey("dbo.Option", t => t.SecondChoiceOptionId, cascadeDelete: false)
-                .ForeignKey("dbo.Option", t => t.ThirdChoiceOptionId, cascadeDelete: false)
-                .ForeignKey("dbo.Option", t => t.FourthChoiceOptionId, cascadeDelete: false)
+                .ForeignKey("dbo.Option", t => t.FirstChoiceOptionId, cascadeDelete: true)
+                .ForeignKey("dbo.Option", t => t.SecondChoiceOptionId, cascadeDelete: true)
+                .ForeignKey("dbo.Option", t => t.ThirdChoiceOptionId, cascadeDelete: true)
+                .ForeignKey("dbo.Option", t => t.FourthChoiceOptionId, cascadeDelete: true)
                 .ForeignKey("dbo.YearTerm", t => t.YearTermId, cascadeDelete: true)
                 .Index(t => t.YearTermId)
+                .Index(t => t.StudentId, unique: true)
                 .Index(t => t.FirstChoiceOptionId)
                 .Index(t => t.SecondChoiceOptionId)
                 .Index(t => t.ThirdChoiceOptionId)
@@ -73,6 +74,7 @@ namespace DiplomaDataModel.Migrations.Diploma
             DropIndex("dbo.Choice", new[] { "ThirdChoiceOptionId" });
             DropIndex("dbo.Choice", new[] { "SecondChoiceOptionId" });
             DropIndex("dbo.Choice", new[] { "FirstChoiceOptionId" });
+            DropIndex("dbo.Choice", new[] { "StudentId" });
             DropIndex("dbo.Choice", new[] { "YearTermId" });
             DropTable("dbo.YearTerm");
             DropTable("dbo.Option");
