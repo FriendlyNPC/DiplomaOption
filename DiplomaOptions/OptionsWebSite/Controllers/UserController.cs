@@ -55,12 +55,14 @@ namespace OptionsWebSite.Controllers
 
 
         // GET: User
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Index()
         {
             return View(await db.Users.ToListAsync());
         }
 
         // GET: User/Details/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Details(string id)
         {
             if (id == null)
@@ -76,8 +78,9 @@ namespace OptionsWebSite.Controllers
             return View(applicationUser);
         }
 
-        
+
         // GET: User/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit(string id)
         {
             if (id == null)
@@ -97,6 +100,7 @@ namespace OptionsWebSite.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Edit([Bind(Include = "Id,StudentId,Email,LockoutEnabled,UserName")] ApplicationUser applicationUser)
         {
             applicationUser.UserName = applicationUser.StudentId;
@@ -110,6 +114,7 @@ namespace OptionsWebSite.Controllers
         }
 
         // GET: User/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> Delete(string id)
         {
             if (id == null)

@@ -24,7 +24,9 @@
                     @if (User.Identity.IsAuthenticated)
                     {
                         <!-- Admin only Stuff-->
-                        if ( User.IsInRole("Admin") ) {
+                        if (User.IsInRole("Admin"))
+                        {
+                            <li>@Html.ActionLink("Users", "Index", "User")</li>
                             <li>@Html.ActionLink("Options", "Index", "Option")</li>
                             <li>@Html.ActionLink("Terms", "Index", "YearTerm")</li>
                             <li>@Html.ActionLink("Choices", "Index", "Choice")</li>
