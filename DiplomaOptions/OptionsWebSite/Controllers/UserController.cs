@@ -101,7 +101,7 @@ namespace OptionsWebSite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,StudentId,Email,LockoutEnabled,UserName")] ApplicationUser applicationUser)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,StudentId, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount, UserName")] ApplicationUser applicationUser)
         {
             applicationUser.UserName = applicationUser.StudentId;
             if (ModelState.IsValid)
@@ -132,11 +132,14 @@ namespace OptionsWebSite.Controllers
         // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
             ApplicationUser applicationUser = await UserManager.FindByIdAsync(id);
-            db.Users.Remove(applicationUser);
+            await UserManager.DeleteAsync(applicationUser);
+            //db.Users.Remove(applicationUser);
             //await db.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 
