@@ -1,48 +1,48 @@
-namespace OptionsWebSite.Migrations.DiplomaOptions
+namespace OptionsWebSite.Migrations.DiplomaDataModel
 {
-    using DiplomaDataModel.Models;
+    using global::DiplomaDataModel.Models;
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<DiplomaDataModel.Models.DiplomaDataModelContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<DiplomaDataModelContext>
     {
         public Configuration()
         {
-            AutomaticMigrationsEnabled = true;
-            MigrationsDirectory = @"Migrations\DiplomaOptions";
+            AutomaticMigrationsEnabled = false;
+            MigrationsDirectory = @"Migrations\DiplomaDataModel";
         }
 
-        protected override void Seed(DiplomaDataModel.Models.DiplomaDataModelContext context)
+        protected override void Seed(DiplomaDataModelContext context)
         {
             context.YearTerms.AddOrUpdate(
-                y => new { y.Year, y.Term },
-                new YearTerm
-                {
-                    Year = 2015,
-                    Term = 10,
-                    IsDefault = false
-                },
-                new YearTerm
-                {
-                    Year = 2015,
-                    Term = 20,
-                    IsDefault = false
-                },
-                new YearTerm
-                {
-                    Year = 2015,
-                    Term = 30,
-                    IsDefault = false
-                },
-                new YearTerm
-                {
-                    Year = 2016,
-                    Term = 10,
-                    IsDefault = true
-                }
-            );
+             y => new { y.Year, y.Term },
+             new YearTerm
+             {
+                 Year = 2015,
+                 Term = 10,
+                 IsDefault = false
+             },
+             new YearTerm
+             {
+                 Year = 2015,
+                 Term = 20,
+                 IsDefault = false
+             },
+             new YearTerm
+             {
+                 Year = 2015,
+                 Term = 30,
+                 IsDefault = false
+             },
+             new YearTerm
+             {
+                 Year = 2016,
+                 Term = 10,
+                 IsDefault = true
+             }
+         );
 
             context.Options.AddOrUpdate(
                 o => new { o.Title },

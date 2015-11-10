@@ -1,4 +1,4 @@
-namespace OptionsWebSite.Migrations.DiplomaOptions
+namespace OptionsWebSite.Migrations.DiplomaDataModel
 {
     using System;
     using System.Data.Entity.Migrations;

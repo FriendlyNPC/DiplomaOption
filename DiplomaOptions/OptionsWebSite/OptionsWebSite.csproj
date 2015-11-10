@@ -176,14 +176,22 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.cs" />
-    <Compile Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.Designer.cs">
-      <DependentUpon>201511052137017_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\DiplomaDataModel\201511101857079_InitialCreate.cs" />
+    <Compile Include="Migrations\DiplomaDataModel\201511101857079_InitialCreate.Designer.cs">
+      <DependentUpon>201511101857079_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\DiplomaOptions\Configuration.cs" />
-    <Compile Include="Migrations\Identity\201511052145137_InitialCreate.cs" />
-    <Compile Include="Migrations\Identity\201511052145137_InitialCreate.Designer.cs">
-      <DependentUpon>201511052145137_InitialCreate.cs</DependentUpon>
+    <Compile Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.cs" />
+    <Compile Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.Designer.cs">
+      <DependentUpon>201511101909589_InitialCreate_2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\DiplomaDataModel\Configuration.cs" />
+    <Compile Include="Migrations\Identity\201511101858080_InitialCreate.cs" />
+    <Compile Include="Migrations\Identity\201511101858080_InitialCreate.Designer.cs">
+      <DependentUpon>201511101858080_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\Identity\201511101909385_InitialCreate_2.cs" />
+    <Compile Include="Migrations\Identity\201511101909385_InitialCreate_2.Designer.cs">
+      <DependentUpon>201511101909385_InitialCreate_2.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Identity\Configuration.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
@@ -201,6 +209,8 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <None Include="Properties\PublishProfiles\a1Dev %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\File System.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -297,11 +307,17 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Migrations\DiplomaOptions\201511052137017_InitialCreate.resx">
-      <DependentUpon>201511052137017_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\DiplomaDataModel\201511101857079_InitialCreate.resx">
+      <DependentUpon>201511101857079_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\Identity\201511052145137_InitialCreate.resx">
-      <DependentUpon>201511052145137_InitialCreate.cs</DependentUpon>
+    <EmbeddedResource Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.resx">
+      <DependentUpon>201511101909589_InitialCreate_2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201511101858080_InitialCreate.resx">
+      <DependentUpon>201511101858080_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\Identity\201511101909385_InitialCreate_2.resx">
+      <DependentUpon>201511101909385_InitialCreate_2.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
