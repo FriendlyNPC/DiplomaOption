@@ -86,9 +86,9 @@ namespace OptionsWebSite.Migrations.DiplomaDataModel
 
             //add seeded choices
             /*
-            context.Options.AddOrUpdate(
-                o => new { o.Title },
-                new Option
+            context.Choice.AddOrUpdate(
+                o => new { o.StudentId, o.YearTermId },
+                new 
                 {
                     Title = "Data Communications",
                     IsActive = true

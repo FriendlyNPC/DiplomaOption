@@ -34,5 +34,9 @@ namespace DiplomaDataModel.Models
         {
             return new ApplicationDbContext();
         }
+
+        //commented out so we can create a user controller
+        //public System.Data.Entity.DbSet<DiplomaDataModel.Models.ApplicationUser> ApplicationUsers { get; set; }
+        
     }
 }
