@@ -44,6 +44,7 @@ namespace OptionsWebSite.Migrations.DiplomaDataModel
              }
          );
 
+            
             context.Options.AddOrUpdate(
                 o => new { o.Title },
                 new Option
@@ -83,17 +84,29 @@ namespace OptionsWebSite.Migrations.DiplomaDataModel
                 }
             );
 
-
+            context.SaveChanges();
             //add seeded choices
             /*
-            context.Choice.AddOrUpdate(
+            context.Choices.AddOrUpdate(
                 o => new { o.StudentId, o.YearTermId },
-                new 
+                new Choice
                 {
-                    Title = "Data Communications",
-                    IsActive = true
+                    YearTerm = context.YearTerms.Where(y => y.Year == 2016 && y.Term == 30).First(),
+                    YearTermId = context.YearTerms.Where(y => y.Year == 2016 && y.Term == 30).First().YearTermId,
+                    StudentId = "A00123456",
+                    StudentFirstName = "",
+                    StudentLastName = "",
+                    SelectionDate = new DateTime(),
+                    Option1 = context.Options.Where(o => o.Title == "").First(),
+                    Option2 = context.Options.Where(o => o.Title == "").First(),
+                    Option3 = context.Options.Where(o => o.Title == "").First(),
+                    Option4 = context.Options.Where(o => o.Title == "").First(),
+                    FirstChoiceOptionId = context.Options.Where(o => o.Title == "").First().OptionId,
+                    SecondChoiceOptionId = context.Options.Where(o => o.Title == "").First().OptionId,
+                    ThirdChoiceOptionId = context.Options.Where(o => o.Title == "").First().OptionId,
+                    FourthChoiceOptionId = context.Options.Where(o => o.Title == "").First().OptionId
                 }
-            }
+            );
             */
 
             context.SaveChanges();
