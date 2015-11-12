@@ -49,7 +49,7 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Index()
         {
-            return View(roleManager.Roles.ToList());
+            return View(roleManager.Roles.ToList());    
         }
 
         // GET: Role/Details/5
@@ -72,9 +72,9 @@ namespace OptionsWebSite.Controllers
             
             foreach(var user in role.Users)
             {
-                   userList.Add(UserManager.FindById(user.UserId).UserName);
+                userList.Add(UserManager.FindById(user.UserId).UserName);
             }
-
+                    
             ViewBag.Users = userList;
 
             return View(role);
@@ -231,17 +231,23 @@ namespace OptionsWebSite.Controllers
         public ActionResult Remove(string id, FormCollection collection)
         {
 
+            var userId = collection.GetValue("UserId").AttemptedValue;
             var role = roleManager.FindById(id);
 
-            var userList = role.Users;
+            var user = db.Users.Find(userId);
 
-            foreach ( var user in userList)
+            if (userId == null)
             {
-                UserManager.RemoveFromRole(user.UserId, role.Id);
+                return RedirectToAction("Index");
             }
 
-            roleManager.Delete(role);
+            if (user == null)
+            {
+                return RedirectToAction("Index");
+            }
 
+            UserManager.RemoveFromRole(userId, role.Name);
+            
             return RedirectToAction("Index");
             
         }
@@ -283,7 +289,16 @@ namespace OptionsWebSite.Controllers
         {
 
             var role = roleManager.FindById(id);
+
+            var userList = role.Users;
+
+            foreach (var user in userList)
+            {
+                UserManager.RemoveFromRole(user.UserId, role.Id);
+            }
+
             roleManager.Delete(role);
+
             return RedirectToAction("Index");
         }
     }

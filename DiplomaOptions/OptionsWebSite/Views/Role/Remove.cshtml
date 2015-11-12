@@ -11,6 +11,7 @@
     @Html.AntiForgeryToken()
 
     <div class="form-horizontal">
+
         <hr />
         <span class="text-danger field-validation-error" data-valmsg-for="Name" data-valmsg-replace="true">@ViewBag.Error</span>
         @Html.Hidden("roleID", Model.Id)

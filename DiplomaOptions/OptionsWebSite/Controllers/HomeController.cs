@@ -13,7 +13,7 @@ namespace OptionsWebSite.Controllers
 
             if (User.Identity.IsAuthenticated)
             {
-                if (User.IsInRole("Student")) {
+                if (User.IsInRole("Student") && !User.IsInRole("Admin")) {
                     return RedirectToAction("Create", "Choice");
                 }
                 else if(User.IsInRole("Admin"))
