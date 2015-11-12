@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Mvc;
 
@@ -83,27 +84,53 @@ namespace OptionsWebSite.Controllers
         [Authorize(Roles = "Admin")]
         public ActionResult Create()
         {
+            ViewBag.Error = "";
             return View();
         }
 
         // POST: Role/Create
         [HttpPost]
+        [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create([Bind(Include = "Name")] IdentityRole identityRole)
         {
-            try
-            {
-                // TODO: Add insert logic here
+            string name = identityRole.Name;
 
-                return RedirectToAction("Index");
-            }
-            catch
+            //validate name
+            if (name == null || name.Equals("") )
             {
+                ViewBag.Error = "Role name is required";
+                ViewBag.name = "";
                 return View();
             }
+
+            ViewBag.name = name;
+
+            if (name.Length > 40)
+            {
+                ViewBag.Error = "Role name cannot be longer than 40 characters";
+                return View(identityRole);
+            }
+
+            if (!Regex.IsMatch(name, @"^[a-zA-Z0-9_-]{1,40}$"))
+            {
+                ViewBag.Error = "Invalid Role name";
+                return View(identityRole);
+            }
+            
+
+            if (roleManager.RoleExists(name))
+            {
+                ViewBag.Error = "A role by that name already exists.";
+                return View(identityRole);
+            }
+
+            roleManager.Create(new IdentityRole(name));
+            return RedirectToAction("Index");    
+            
         }
 
-        // GET: Role/Edit/5
+        // GET: Role/Add
         [Authorize(Roles = "Admin")]
         public ActionResult Add(string id)
         {
@@ -119,37 +146,59 @@ namespace OptionsWebSite.Controllers
                 return HttpNotFound();
             }
 
-            var userList = new List<String>();
-            
-            foreach (var user in role.Users)
-            {
-                userList.Add(UserManager.FindById(user.UserId).UserName);
-            }
+            var usersNotInRole = db.Users.Where(m => m.Roles.All(r => r.RoleId != role.Id)).ToList();
 
-            ViewBag.Users = userList;
+            var userList = new SelectList(usersNotInRole, "id", "UserName");
+
+
+            ViewBag.UserList = userList;
+            ViewBag.RoleName = role.Name;
 
             return View(role);
         }
 
-        // POST: Role/Edit/5
+        // POST: Role/Add/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public ActionResult Add(string id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add update logic here
+            var userId = collection.GetValue("UserId").AttemptedValue;
+            var role = roleManager.FindById(id);
 
-                return RedirectToAction("Index");
-            }
-            catch
+            var user = db.Users.Find(userId);
+
+            if(user == null)
             {
+                ViewBag.Error = "User does not exist";
+                var usersNotInRole = db.Users.Where(m => m.Roles.All(r => r.RoleId != role.Id)).ToList();
+                var userList = new SelectList(usersNotInRole, "id", "UserName");
+                ViewBag.UserList = userList;
+                ViewBag.RoleName = role.Name;
+
                 return View();
             }
+
+            var inRole = role.Users.Where(i => i.UserId == user.Id).Count();
+
+            if (inRole > 0)
+            {
+                ViewBag.Error = "User is already in role";
+                var usersNotInRole = db.Users.Where(m => m.Roles.All(r => r.RoleId != role.Id)).ToList();
+                var userList = new SelectList(usersNotInRole, "Id", "UserName");
+                ViewBag.UserList = userList;
+                ViewBag.RoleName = role.Name;
+
+                return View();
+            }
+
+            UserManager.AddToRole(user.Id, role.Name);
+            
+
+            return RedirectToAction("Index");
         }
 
-        // GET: Role/Edit/5
+        // GET: Role/Remove/5
         [Authorize(Roles = "Admin")]
         public ActionResult Remove(string id)
         {
@@ -165,35 +214,36 @@ namespace OptionsWebSite.Controllers
                 return HttpNotFound();
             }
 
-            var userList = new List<SelectListItem>();
-            /*
-            foreach (var user in role.Users)
-            {
-                new SelectListItem {
+            ViewBag.Error = "";
+            ViewBag.RoleName = role.Name;
+            
+            var usersInRole = db.Users.Where(m => m.Roles.Any(r => r.RoleId == role.Id)).ToList();
+            var userList = new SelectList(usersInRole, "Id", "UserName");
+            ViewBag.UserList = userList;
 
-                    //Text: userList.Add(UserManager.FindById(user.UserId).UserName)
-                }
-            }
-            */
             return View(role);
         }
 
-        // POST: Role/Edit/5
+        // POST: Role/Remove/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
         public ActionResult Remove(string id, FormCollection collection)
         {
-            try
-            {
-                // TODO: Add update logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
+            var role = roleManager.FindById(id);
+
+            var userList = role.Users;
+
+            foreach ( var user in userList)
             {
-                return View();
+                UserManager.RemoveFromRole(user.UserId, role.Id);
             }
+
+            roleManager.Delete(role);
+
+            return RedirectToAction("Index");
+            
         }
 
 
@@ -229,18 +279,12 @@ namespace OptionsWebSite.Controllers
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public ActionResult DeleteConfirmed(string id, FormCollection collection)
+        public ActionResult DeleteConfirmed(string id)
         {
-            try
-            {
-                // TODO: Add delete logic here
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
-            }
+            var role = roleManager.FindById(id);
+            roleManager.Delete(role);
+            return RedirectToAction("Index");
         }
     }
 }
