@@ -106,6 +106,13 @@ namespace OptionsWebSite.Controllers
             applicationUser.UserName = applicationUser.StudentId;
             if (ModelState.IsValid)
             {
+                if (applicationUser.LockoutEnabled)
+                {
+                    var lockout = new DateTime();
+                    lockout.AddYears(1000);
+                    applicationUser.LockoutEndDateUtc = lockout;
+                }
+
                 db.Entry(applicationUser).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
