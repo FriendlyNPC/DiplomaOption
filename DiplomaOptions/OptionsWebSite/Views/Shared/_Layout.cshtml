@@ -26,6 +26,7 @@
                         <!-- Admin only Stuff-->
                         if (User.IsInRole("Admin"))
                         {
+                            <li>@Html.ActionLink("Roles", "Index", "Role")</li>
                             <li>@Html.ActionLink("Users", "Index", "User")</li>
                             <li>@Html.ActionLink("Options", "Index", "Option")</li>
                             <li>@Html.ActionLink("Terms", "Index", "YearTerm")</li>

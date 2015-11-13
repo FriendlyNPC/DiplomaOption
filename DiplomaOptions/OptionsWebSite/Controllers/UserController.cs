@@ -101,12 +101,37 @@ namespace OptionsWebSite.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,StudentId,Email,LockoutEnabled,UserName")] ApplicationUser applicationUser)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,StudentId, Email, EmailConfirmed, PasswordHash, SecurityStamp, PhoneNumber, PhoneNumberConfirmed, TwoFactorEnabled, LockoutEndDateUtc, LockoutEnabled, AccessFailedCount, UserName")] ApplicationUser applicationUser)
         {
-            applicationUser.UserName = applicationUser.StudentId;
+
+            var id = applicationUser.Id;
+            var studentId = applicationUser.StudentId;
+            var lockoutEnabled = applicationUser.LockoutEnabled;
+
+            applicationUser = await db.Users.Where(s => s.Id == id).FirstOrDefaultAsync();
+
+            if( applicationUser == null)
+            {
+                return RedirectToAction("Index");
+            }
+
+            applicationUser.StudentId = studentId;
+            applicationUser.UserName = studentId;
+            applicationUser.Id = id;
+            applicationUser.LockoutEnabled = lockoutEnabled;
+
             if (ModelState.IsValid)
             {
-                db.Entry(applicationUser).State = EntityState.Modified;
+                if (applicationUser.LockoutEnabled)
+                {
+                    var lockout = DateTime.Now;
+                    lockout.AddYears(100);
+                    applicationUser.LockoutEndDateUtc = lockout;
+                } else
+                {
+                    applicationUser.LockoutEndDateUtc = null;
+                }
+
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -132,11 +157,14 @@ namespace OptionsWebSite.Controllers
         // POST: User/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteConfirmed(string id)
         {
             ApplicationUser applicationUser = await UserManager.FindByIdAsync(id);
-            db.Users.Remove(applicationUser);
+            await UserManager.DeleteAsync(applicationUser);
+            //db.Users.Remove(applicationUser);
             //await db.SaveChangesAsync();
+
             return RedirectToAction("Index");
         }
 

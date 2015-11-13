@@ -154,6 +154,7 @@ namespace OptionsWebSite.Controllers
             if (ModelState.IsValid)
             {
                 var user = new ApplicationUser { UserName = model.StudentId, StudentId = model.StudentId, Email = model.Email };
+                user.LockoutEnabled = false;
                 var result = await UserManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
                 {

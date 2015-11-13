@@ -68,7 +68,7 @@ namespace OptionsWebSite.Controllers
                 return HttpNotFound();
             }
 
-            if(User.IsInRole("Student"))
+            if(User.IsInRole("Student") && !User.IsInRole("Admin"))
             {
                 if (! choice.StudentId.Equals(User.Identity.Name))
                 {
@@ -98,7 +98,7 @@ namespace OptionsWebSite.Controllers
         public ActionResult Create()
         {
 
-            if (User.IsInRole("Student"))
+            if (User.IsInRole("Student") && !User.IsInRole("Admin"))
             {
                 var exists = db.Choices.Where(c => c.StudentId == User.Identity.Name).FirstOrDefault();
                 if (exists != null)
@@ -130,7 +130,7 @@ namespace OptionsWebSite.Controllers
         {
             choice.StudentId = choice.StudentId.ToUpper();
 
-            if (User.IsInRole("Student"))
+            if (User.IsInRole("Student") && !!User.IsInRole("Admin"))
             {
                 choice.StudentId = User.Identity.Name;
             }
@@ -290,7 +290,6 @@ namespace OptionsWebSite.Controllers
         private SelectList getFriendlyTermNamesList(int selected_id)
         {
             List<SelectListItem> terms = new List<SelectListItem>();
-
             List<YearTerm> termObjs = db.YearTerms.ToList();
 
             foreach(YearTerm yearterm in termObjs)
