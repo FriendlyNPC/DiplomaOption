@@ -137,37 +137,7 @@ namespace OptionsWebSite.Controllers
             }
             return View(applicationUser);
         }
-
-        // GET: User/Delete/5
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> Delete(string id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            ApplicationUser applicationUser = await UserManager.FindByIdAsync(id);
-            if (applicationUser == null)
-            {
-                return HttpNotFound();
-            }
-            return View(applicationUser);
-        }
-
-        // POST: User/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Admin")]
-        public async Task<ActionResult> DeleteConfirmed(string id)
-        {
-            ApplicationUser applicationUser = await UserManager.FindByIdAsync(id);
-            await UserManager.DeleteAsync(applicationUser);
-            //db.Users.Remove(applicationUser);
-            //await db.SaveChangesAsync();
-
-            return RedirectToAction("Index");
-        }
-
+        
         protected override void Dispose(bool disposing)
         {
             if (disposing)
