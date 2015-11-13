@@ -1,0 +1,136 @@
+﻿@model IEnumerable<DiplomaDataModel.Models.Choice>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.SelectionDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.YearTerm.Term)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentId)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentFirstName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.StudentLastName)
+        </th>
+
+        <th>
+            @Html.DisplayNameFor(model => model.Option1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Option2)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Option3)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Option4)
+        </th>
+
+
+
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.SelectionDate)
+            </td>
+            <td>
+                @ViewBag.convertTerm(item.YearTerm.Year, item.YearTerm.Term)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentFirstName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StudentLastName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Option1.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Option2.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Option3.Title)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Option4.Title)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.ChoiceId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.ChoiceId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.ChoiceId })
+            </td>
+        </tr>
+    }
+</table>
+
+<div id="container" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
+<script>
+if((@Model.Count()) > 0)
+    $(function () {
+        var chart = new Highcharts.Chart({
+            chart: {
+                plotBackgroundColor: null,
+                plotBorderWidth: null,
+                plotShadow: false,
+                type: 'pie',
+                renderTo : 'container'
+            },
+            title: {
+                text: 'First Choice Selections'
+            },
+            tooltip: {
+                pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+            },
+            plotOptions: {
+                pie: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: {
+                        enabled: true,
+                        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+                        style: {
+                            color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+                        }
+                    }
+                }
+            },
+            series: [{
+                name: 'Selected',
+                colorByPoint: true,
+                data:[
+                @{bool first = true; int students = Model.Count();}
+                @foreach(var option in ViewBag.options)
+                {
+                    
+                    if (!first)
+                    {
+                        <text>
+                            ,
+                        </text>
+                    }
+
+                    <text>
+                       {
+                           name: '@(option.Title)'.replace(/&amp;/g, '&'),
+                            y : @(((double) ViewBag.option1totals[option.OptionId] / (double) students) * 100.0)
+                       }
+                    </text>
+                    first = false;
+                        }
+                ],
+
+            }]
+        });
+    });
+</script>

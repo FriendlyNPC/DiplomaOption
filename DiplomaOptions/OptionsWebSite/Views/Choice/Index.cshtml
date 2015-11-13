@@ -1,85 +1,39 @@
-﻿@model IEnumerable<DiplomaDataModel.Models.Choice>
-
-@{
+﻿@{
     ViewBag.Title = "Choices";
 }
 
 <h2>@ViewBag.Title</h2>
+<br />
+<br />
+<div class="form-group">
+    @Html.Label("Select a Term", htmlAttributes: new { @class = "control-label col-md-2" })
+    <div class="col-md-10">
+        @Html.DropDownList("Term", ViewBag.YearTermId as SelectList, new { id = "Term", @class = "form-control" })
+    </div>
+</div>
+<br />
+<br />
+<br />
+
 
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.SelectionDate)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.YearTerm.Term)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StudentId)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StudentFirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.StudentLastName)
-        </th>
+<div id="Report">
 
-        <th>
-            @Html.DisplayNameFor(model => model.Option1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Option2)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Option3)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Option4)
-        </th>
-        
-        
-        
-        <th></th>
-    </tr>
+</div>
+@section Scripts{
+<script src="https://code.highcharts.com/highcharts.js"></script>
+<script src="https://code.highcharts.com/modules/exporting.js"></script>
+ <script type="text/javascript">
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.SelectionDate)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.YearTerm.YearTermId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudentId)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudentFirstName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.StudentLastName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Option1.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Option2.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Option3.Title)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Option4.Title)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ChoiceId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ChoiceId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ChoiceId })
-        </td>
-    </tr>
-}
+    $(document).ready(function () {
+        $("#Term").change(function () {
+            var TermID =  $("#Term").val();
+               $("#Report").load('@(Url.Action("GetChoices", "Choice",null, Request.Url.Scheme))?TermID=' + TermID);
+        });
+        var TermID = $("#Term").val();
+        $("#Report").load('@(Url.Action("GetChoices", "Choice",null, Request.Url.Scheme))?TermID=' + TermID);
+    });
 
-</table>
+</script>  }

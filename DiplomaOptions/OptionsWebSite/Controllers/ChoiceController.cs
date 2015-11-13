@@ -17,11 +17,40 @@ namespace OptionsWebSite.Controllers
 
         // GET: Choice
         [Authorize(Roles ="Admin")]
-        public async Task<ActionResult> Index()
-        {
-            var choices = db.Choices.Include(c => c.Option1).Include(c => c.Option2).Include(c => c.Option3).Include(c => c.Option4).Include(c => c.YearTerm);            
+        public ActionResult Index()
+        { 
+            
+            var defaultTerm = db.YearTerms.Where(c => c.IsDefault == true).FirstOrDefault();
 
-            return View(await choices.ToListAsync());
+            ViewBag.YearTermId = getFriendlyTermNamesList(defaultTerm.YearTermId);
+
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult GetChoices(int TermID)
+        {
+            var choices = db.Choices.Include(c => c.Option1).Include(c => c.Option2).Include(c => c.Option3).Include(c => c.Option4).Include(c => c.YearTerm);
+
+
+            ViewBag.convertTerm = new Func<int, int, string>(convertTermToFriendlyName);
+            List<Option> options = db.Options.ToList();
+            int[] option1totals = new int[options.Last().OptionId + 1];
+            ViewBag.options = options;
+
+            List<Choice> model = new List<Choice>();
+            
+
+            foreach (var choice in choices)
+            {
+                if (choice.YearTermId == TermID)
+                {
+                    option1totals[choice.Option1.OptionId]++;
+                    model.Add(choice);
+                }
+            }
+            ViewBag.option1totals = option1totals;
+            return PartialView("_ReportPartial", model);
         }
 
         // GET: Choice/Details/5

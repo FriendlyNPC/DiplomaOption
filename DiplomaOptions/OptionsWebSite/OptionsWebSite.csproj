@@ -181,10 +181,6 @@
     <Compile Include="Migrations\DiplomaDataModel\201511101857079_InitialCreate.Designer.cs">
       <DependentUpon>201511101857079_InitialCreate.cs</DependentUpon>
     </Compile>
-    <Compile Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.cs" />
-    <Compile Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.Designer.cs">
-      <DependentUpon>201511101909589_InitialCreate_2.cs</DependentUpon>
-    </Compile>
     <Compile Include="Migrations\DiplomaDataModel\Configuration.cs" />
     <Compile Include="Migrations\Identity\201511101858080_InitialCreate.cs" />
     <Compile Include="Migrations\Identity\201511101858080_InitialCreate.Designer.cs">
@@ -227,6 +223,7 @@
     <Content Include="Views\Scripts\bootstrap.min.js" />
     <None Include="Properties\PublishProfiles\a1Dev.pubxml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Choice\_ReportPartial.cshtml" />
     <None Include="Views\Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Views\Scripts\jquery-1.10.2.js" />
     <Content Include="Views\Scripts\jquery-1.10.2.min.js" />
@@ -314,9 +311,6 @@
     <EmbeddedResource Include="Migrations\DiplomaDataModel\201511101857079_InitialCreate.resx">
       <DependentUpon>201511101857079_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Migrations\DiplomaDataModel\201511101909589_InitialCreate_2.resx">
-      <DependentUpon>201511101909589_InitialCreate_2.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Migrations\Identity\201511101858080_InitialCreate.resx">
       <DependentUpon>201511101858080_InitialCreate.cs</DependentUpon>
     </EmbeddedResource>
@@ -338,7 +332,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
+          <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>54625</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
